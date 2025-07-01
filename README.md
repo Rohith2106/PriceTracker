@@ -3,9 +3,9 @@
 Welcome to **Price Tracker**, a powerful and sleek web application designed to help you monitor product prices from your favorite online stores. Never miss a deal again!
 
 ## 📸Screenshot
-![alt text](https://github.com/Rohith2106/PriceTracker/images/main/img1.png?raw=true)
-![alt text](https://github.com/Rohith2106/PriceTracker/images/main/img2.png?raw=true)
-![alt text](https://github.com/Rohith2106/PriceTracker/images/main/img3.png?raw=true)
+![alt text](https://github.com/Rohith2106/PriceTracker/images/blob/main/img1.png?raw=true)
+![alt text](https://github.com/Rohith2106/PriceTracker/images/blob/main/img2.png?raw=true)
+![alt text](https://github.com/Rohith2106/PriceTracker/images/blob/main/img3.png?raw=true)
 
 ---
 
