@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-// backend/main.go
-=======
->>>>>>> 397637f ('updated')
 package main
 
 import (
@@ -9,104 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-<<<<<<< HEAD
-	"price-tracker-backend/scraper"
-	"price-tracker-backend/tracker"
-	"sync"
-	"time"
-
-	webpush "github.com/SherClockHolmes/webpush-go"
-	"github.com/google/uuid"
-)
-
-// Store VAPID keys securely (e.g., environment variables in production)
-const (
-	vapidPublicKey  = "BFcGIPKEWYMvvsaJojf-i9Y6izE__pVmfV7kXUchaowFMselBQSSj8DDuqNHAyxUwvzISj2VDnN9O5wnaBUK998" // Same as in frontend
-	vapidPrivateKey = "KxUm-egjA8UJdsRBjPkzOY5uOA_Oy7V5Z8vwT7q2l28"                                             // Keep this secret!
-)
-
-// In-memory store for active trackers
-// Key: trackerID, Value: Tracker instance
-var activeTrackers = make(map[string]*tracker.Tracker)
-var mu sync.RWMutex // Mutex to protect activeTrackers map
-
-type TrackRequest struct {
-	URL          string               `json:"url"`
-	Threshold    float64              `json:"threshold"`
-	Subscription webpush.Subscription `json:"subscription"` // To store the client's push subscription
-}
-
-func handleTrackRequest(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Only POST method is allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	var req TrackRequest
-	err := json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		http.Error(w, fmt.Sprintf("Invalid request body: %v", err), http.StatusBadRequest)
-		return
-	}
-
-	if req.URL == "" || req.Threshold <= 0 {
-		http.Error(w, "URL and positive threshold are required", http.StatusBadRequest)
-		return
-	}
-	if req.Subscription.Endpoint == "" {
-		http.Error(w, "Push subscription is required", http.StatusBadRequest)
-		return
-	}
-
-	log.Printf("Received track request for URL: %s, Threshold: %.2f", req.URL, req.Threshold)
-
-	// Initial scrape to get current price and validate URL/selector
-	currentPrice, selectorUsed, err := scraper.ScrapePrice(req.URL)
-	if err != nil {
-		log.Printf("Error during initial scrape for %s: %v", req.URL, err)
-		http.Error(w, fmt.Sprintf("Failed to scrape initial price: %v", err), http.StatusInternalServerError)
-		return
-	}
-	log.Printf("Initial price for %s: %.2f (using selector: %s)", req.URL, currentPrice, selectorUsed)
-
-	trackerID := uuid.New().String()
-	newTracker := &tracker.Tracker{
-		ID:             trackerID,
-		URL:            req.URL,
-		Selector:       selectorUsed, // Store the selector that worked
-		ThresholdPrice: req.Threshold,
-		Subscription:   req.Subscription,
-		StopChan:       make(chan struct{}),
-		LastPrice:      currentPrice,
-	}
-
-	mu.Lock()
-	activeTrackers[trackerID] = newTracker
-	mu.Unlock()
-
-	go newTracker.StartMonitoring(1 * time.Minute) // Check every 1 minute
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"message":      "Tracking started",
-		"trackerId":    trackerID,
-		"currentPrice": currentPrice,
-	})
-}
-
-func main() {
-	// Initialize webpush with VAPID details
-	// err := webpush.SetVAPIDDetails("mailto:your-email@example.com", vapidPublicKey, vapidPrivateKey)
-	// if err != nil {
-	// 	log.Fatalf("Error setting VAPID details: %v", err)
-	// }
-
-	http.HandleFunc("/api/track", handleTrackRequest)
-	// Could add an /api/stop endpoint later if needed
-
-	fmt.Println("Server starting on :8080...")
-	log.Fatal(http.ListenAndServe(":8080", nil))
-=======
 	"strconv"
 	"strings"
 	"sync"
@@ -525,5 +423,4 @@ func checkAndNotify(id string, item TrackingRequest) {
 	} else {
 		log.Printf("Price not yet at target for %s. Current: %.2f, Target: %.2f", id, currentPrice, item.TargetPrice)
 	}
->>>>>>> 397637f ('updated')
 }
